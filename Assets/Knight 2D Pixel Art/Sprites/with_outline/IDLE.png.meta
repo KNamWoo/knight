@@ -90,7 +90,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -156,8 +156,12 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape: []
-      tessellationDetail: -1
+      physicsShape:
+      - - {x: -5, y: -18.5}
+        - {x: 14, y: -18.5}
+        - {x: 12, y: 13.5}
+        - {x: -3, y: 18.5}
+      tessellationDetail: 0
       bones: []
       spriteID: 49525dc25f7f05b00800000000000000
       internalID: 815424164945274260
@@ -179,7 +183,7 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
       spriteID: 813cc64c4d9fd3cf0800000000000000
       internalID: -270785710348516584
@@ -201,7 +205,7 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
       spriteID: 41f3fe79b926e2570800000000000000
       internalID: 8443794771774750484
@@ -223,7 +227,7 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
       spriteID: ccc89ef21e1d9a810800000000000000
       internalID: 1777182293076053196
@@ -245,7 +249,7 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
       spriteID: 4ac335d169fd9d450800000000000000
       internalID: 6114163804962241700
@@ -267,7 +271,7 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
       spriteID: 598f06f4d2206bc90800000000000000
       internalID: -7154528564402915179
@@ -289,7 +293,7 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
       spriteID: 2bce10201bd4a6f80800000000000000
       internalID: -8112586356116296526

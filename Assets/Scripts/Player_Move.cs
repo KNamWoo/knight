@@ -4,16 +4,18 @@ public class Player_Move : MonoBehaviour
 {
     public float jumpPower;
     public float speed;
-    float h, v;
+    public float h, v;
 
-    bool jumpAble;
+    public bool jumpAble;
+    public bool jumping;
 
-    public string[] animClip;
+    public AnimationClip[] animClip;
     KeyCode jumpKey = KeyCode.Space;
 
     Rigidbody2D rbody;
-    Animation anim;
+    public Animation anim;
     Animator animator;
+    SpriteRenderer sprite;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -21,11 +23,13 @@ public class Player_Move : MonoBehaviour
         rbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animation>();
         animator = GetComponent<Animator>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     void Start()
     {
         jumpAble = true;
+        jumping = false;
     }
 
     // Update is called once per frame
@@ -39,6 +43,7 @@ public class Player_Move : MonoBehaviour
         h = Input.GetAxisRaw("Horizontal");
         if(Input.GetKeyDown(jumpKey) && jumpAble == true){
             jumpAble = false;
+            jumping = true;
             rbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         }else{
             v = 0;
@@ -53,9 +58,24 @@ public class Player_Move : MonoBehaviour
 
     void Motion(){
         if(h > 0){
-            anim.Play("Player_Walk");
+            transform.localScale = new Vector3(1, 1, 1);
+        }else if(h < 0){
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+
+        if(jumping == true){
+            animator.Play("Player_Jump");
+        }else if(h != 0){
+            animator.Play("Player_Walk");
         }else{
-            anim.Play("Player_Idle");
+            animator.Play("Player_Idle");
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Ground"){
+            jumping = false;
         }
     }
 }
