@@ -156,12 +156,12 @@ TextureImporter:
       name: ATTACK 3_0
       rect:
         serializedVersion: 2
-        x: 124
+        x: 8
         y: 22
-        width: 30
-        height: 38
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -178,12 +178,12 @@ TextureImporter:
       name: ATTACK 3_1
       rect:
         serializedVersion: 2
-        x: 219
+        x: 104
         y: 22
-        width: 53
+        width: 74
         height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -200,12 +200,12 @@ TextureImporter:
       name: ATTACK 3_2
       rect:
         serializedVersion: 2
-        x: 315
+        x: 200
         y: 22
-        width: 53
-        height: 45
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -222,12 +222,12 @@ TextureImporter:
       name: ATTACK 3_5
       rect:
         serializedVersion: 2
-        x: 23
+        x: 296
         y: 22
-        width: 38
-        height: 34
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -244,12 +244,12 @@ TextureImporter:
       name: ATTACK 3_6
       rect:
         serializedVersion: 2
-        x: 410
+        x: 392
         y: 22
-        width: 54
-        height: 37
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -266,12 +266,12 @@ TextureImporter:
       name: ATTACK 3_8
       rect:
         serializedVersion: 2
-        x: 508
+        x: 488
         y: 22
-        width: 34
-        height: 32
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []

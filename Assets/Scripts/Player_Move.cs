@@ -4,54 +4,57 @@ public class Player_Move : MonoBehaviour
 {
     public float jumpPower;
     public float speed;
-    public float h, v;
+    
+    float curSpeed;
+    float h;
 
     public bool jumpAble;
     public bool jumping;
 
     public AnimationClip[] animClip;
     KeyCode jumpKey = KeyCode.Space;
+    KeyCode runKey = KeyCode.LeftShift;
 
     Rigidbody2D rbody;
     public Animation anim;
     Animator animator;
-    SpriteRenderer sprite;
+
+    public Vector2 attackOffset;
+    public Vector2 attackSize = new Vector2(1f, 1f);
+    public LayerMask enemyLayer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
-    {
+    void Awake(){
         rbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animation>();
         animator = GetComponent<Animator>();
-        sprite = GetComponent<SpriteRenderer>();
     }
 
-    void Start()
-    {
+    void Start(){
         jumpAble = true;
         jumping = false;
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         Move();
         Motion();
     }
 
     void Move(){
         h = Input.GetAxisRaw("Horizontal");
-        if(Input.GetKeyDown(jumpKey) && jumpAble == true){
+        if(Input.GetKey(runKey)){
+            curSpeed = speed*1.5f;
+        }else{
+            curSpeed = speed;
+        }if(Input.GetKeyDown(jumpKey) && jumpAble == true){
             jumpAble = false;
             jumping = true;
             rbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        }else{
-            v = 0;
-            jumpAble = true;
         }
 
         Vector3 curPos = transform.position;
-        Vector3 nextPos = new Vector3(h, 0, 0) * speed * Time.deltaTime;
+        Vector3 nextPos = new Vector3(h, 0, 0) * curSpeed * Time.deltaTime;
 
         transform.position = curPos + nextPos;
     }
@@ -66,16 +69,38 @@ public class Player_Move : MonoBehaviour
         if(jumping == true){
             animator.Play("Player_Jump");
         }else if(h != 0){
-            animator.Play("Player_Walk");
+            if(curSpeed>speed){
+                animator.Play("Player_Run");
+            }else{
+                animator.Play("Player_Walk");
+            }
         }else{
             animator.Play("Player_Idle");
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "Ground"){
+    void Attack(){
+        Vector2 attackPos = (Vector2)transform.position + attackOffset;
+        Collider2D[] hits = Physics2D.OverlapBoxAll(attackPos, attackSize, 0f, enemyLayer);
+
+        /*foreach (var hit in hits)
+        {
+            Debug.Log("적 감지됨: " + hit.name);
+            hit.GetComponent<Enemy>()?.TakeDamage(1);
+        }*/
+    }
+
+    void OnDrawGizmosSelected(){
+        Gizmos.color = Color.red;
+        Vector2 attackPos = (Vector2)transform.position + attackOffset;
+        Gizmos.DrawWireCube(attackPos, attackSize);
+    }
+
+
+    void OnCollisionEnter2D(Collision2D collision){
+        if(collision.gameObject.CompareTag("Ground")){
             jumping = false;
+            jumpAble = true;
         }
     }
 }

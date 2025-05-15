@@ -147,12 +147,12 @@ TextureImporter:
       name: DEFEND_0
       rect:
         serializedVersion: 2
-        x: 36
+        x: 8
         y: 22
-        width: 23
-        height: 36
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -169,12 +169,12 @@ TextureImporter:
       name: DEFEND_1
       rect:
         serializedVersion: 2
-        x: 127
+        x: 104
         y: 22
-        width: 31
-        height: 35
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -191,12 +191,12 @@ TextureImporter:
       name: DEFEND_2
       rect:
         serializedVersion: 2
-        x: 221
+        x: 200
         y: 22
-        width: 33
-        height: 34
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -213,12 +213,12 @@ TextureImporter:
       name: DEFEND_3
       rect:
         serializedVersion: 2
-        x: 316
+        x: 296
         y: 22
-        width: 35
-        height: 34
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -235,12 +235,12 @@ TextureImporter:
       name: DEFEND_4
       rect:
         serializedVersion: 2
-        x: 414
+        x: 392
         y: 22
-        width: 33
-        height: 34
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -254,37 +254,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DEFEND_5
-      rect:
-        serializedVersion: 2
-        x: 444
-        y: 41
-        width: 4
-        height: 4
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 653fdc5fb327ea330800000000000000
-      internalID: 3724039543734530902
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: DEFEND_6
       rect:
         serializedVersion: 2
-        x: 512
+        x: 488
         y: 22
-        width: 28
-        height: 35
+        width: 74
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
