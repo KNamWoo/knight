@@ -11,17 +11,17 @@ public class Player_Move : MonoBehaviour
     public bool jumpAble;
     public bool jumping;
 
-    public AnimationClip[] animClip;
     KeyCode jumpKey = KeyCode.Space;
     KeyCode runKey = KeyCode.LeftShift;
 
-    Rigidbody2D rbody;
+    public AnimationClip[] animClip;
     public Animation anim;
+    Rigidbody2D rbody;
     Animator animator;
 
-    public Vector2 attackOffset;
-    public Vector2 attackSize = new Vector2(1f, 1f);
     public LayerMask enemyLayer;
+    public Vector2 attackOffset;
+    public Vector2 attackSize;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake(){
@@ -31,6 +31,8 @@ public class Player_Move : MonoBehaviour
     }
 
     void Start(){
+        attackOffset = new Vector2(1.5f, -0.45f);
+        attackSize = new Vector2(1.2f, 2f);
         jumpAble = true;
         jumping = false;
     }
@@ -61,8 +63,10 @@ public class Player_Move : MonoBehaviour
 
     void Motion(){
         if(h > 0){
+            attackOffset = new Vector2(1.5f, -0.45f);
             transform.localScale = new Vector3(1, 1, 1);
         }else if(h < 0){
+            attackOffset = new Vector2(-1.5f, -0.45f);
             transform.localScale = new Vector3(-1, 1, 1);
         }
 

@@ -581,11 +581,11 @@ MonoBehaviour:
   jumping: 0
   animClip: []
   anim: {fileID: 1461276734}
-  attackOffset: {x: 1.2, y: -0.2}
-  attackSize: {x: 1.5, y: 2}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 0
+  attackOffset: {x: 1.5, y: -0.45}
+  attackSize: {x: 1.2, y: 2}
 --- !u!111 &1461276734
 Animation:
   m_ObjectHideFlags: 0
