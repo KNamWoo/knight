@@ -96,6 +96,7 @@ public class Player_Move : MonoBehaviour
         {
             curSpeed = speed;
         }
+        
         if (Input.GetKeyDown(jumpKey) && jumpAble == true)
         {
             jumpAble = false;
