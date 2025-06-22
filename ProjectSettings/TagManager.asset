@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
+  - Slot
+  - HPPotion
+  - MPPotion
   layers:
   - Default
   - TransparentFX

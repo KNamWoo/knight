@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Mono.Cecil.Cil;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
 public class Player_Move : MonoBehaviour
 {
-    private bool canPlay = false;
+    private bool start = false;
 
     int HP;
 
@@ -17,11 +18,19 @@ public class Player_Move : MonoBehaviour
     float curSpeed;
     float h;
 
-    public bool jumpAble;
-    public bool jumping;
+    bool eSkill;
+    bool defendSkill;
+    bool qSkill;
+    bool jumpAble;
+    bool jumping;
+    bool canPlay;
+    public bool canMove;
+    public bool defending;
+    public bool buttonUp;
 
     KeyCode jumpKey = KeyCode.Space;
     KeyCode runKey = KeyCode.LeftShift;
+    MouseButton but = MouseButton.Right;
 
     public AnimationClip[] animClip;
     public Animation anim;
@@ -47,6 +56,7 @@ public class Player_Move : MonoBehaviour
             Animator.StringToHash("Player_Attack1"),
             Animator.StringToHash("Player_Attack2"),
             Animator.StringToHash("Player_Attack3"),
+            //Animator.StringToHash("Player_Defend"),
             Animator.StringToHash("Player_Death")
         };
     }
@@ -58,24 +68,33 @@ public class Player_Move : MonoBehaviour
         attackSize = new Vector2(1.2f, 2f);
         jumpAble = true;
         jumping = false;
+        canMove = true;
+        canPlay = true;
+        defending = false;
+        buttonUp = true;
+        eSkill = true;
+        qSkill = true;
+        defendSkill = true;
         HP = 100;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!canPlay)
-        {
-            return;
-        }
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         int currentHash = stateInfo.shortNameHash;
 
         if (!blockedStates.Contains(currentHash))
         {
-            Move();
-            Motion();
-            Skill();
+            if (start)
+            {
+                if (canPlay)
+                {
+                    Move();
+                    Motion();
+                }
+                Skill();
+            }
         }
 
         if (HP <= 0)
@@ -96,7 +115,7 @@ public class Player_Move : MonoBehaviour
         {
             curSpeed = speed;
         }
-        
+
         if (Input.GetKeyDown(jumpKey) && jumpAble == true)
         {
             jumpAble = false;
@@ -159,17 +178,37 @@ public class Player_Move : MonoBehaviour
             animator.Play("Player_Attack1");
             //StartCoroutine(Attack1(0.05f));
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+
+        if (defendSkill)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                buttonUp = false;
+                animator.Play("Player_Defend");
+                canPlay = false;
+                Debug.Log("Down");
+            }
+            else if (Input.GetMouseButtonUp(1))
+            {
+                buttonUp = true;
+                Debug.Log("Up");
+            }
+            else if (buttonUp == true && defending == false)
+            {
+                canPlay = true;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && eSkill)
         {
             animator.Play("Player_Attack2");
+            StartCoroutine(ESkillCool(3f));
         }
-        else if (Input.GetKeyDown(KeyCode.Q))
+
+        if (Input.GetKeyDown(KeyCode.Q) && qSkill)
         {
             animator.Play("Player_Attack3");
-        }
-        else if (Input.GetKeyDown(KeyCode.F))
-        {
-            animator.Play("Player_Defend");
+            StartCoroutine(QSkillCool(7f));
         }
     }
 
@@ -192,7 +231,25 @@ public class Player_Move : MonoBehaviour
     IEnumerator EnableInputAfterDelay(float cool)
     {
         yield return new WaitForSeconds(cool);
-        canPlay = true;
+        start = true;
         Debug.Log("플레이 가능");
+    }
+
+    IEnumerator ESkillCool(float cool)
+    {
+        Debug.Log("E스킬 쿨");
+        eSkill = false;
+        yield return new WaitForSeconds(cool);
+        eSkill = true;
+        Debug.Log("E스킬 준비");
+    }
+
+    IEnumerator QSkillCool(float cool)
+    {
+        Debug.Log("Q스킬 쿨");
+        qSkill = false;
+        yield return new WaitForSeconds(cool);
+        qSkill = true;
+        Debug.Log("Q스킬 준비");
     }
 }
