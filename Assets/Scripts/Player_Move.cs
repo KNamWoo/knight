@@ -8,9 +8,12 @@ using UnityEngine;
 
 public class Player_Move : MonoBehaviour
 {
-    private bool start = false;
+    public static Player_Move instance { get; private set; }
+
+    public bool start = false;
 
     int HP;
+    public int currentHash;
 
     public float jumpPower;
     public float speed;
@@ -23,10 +26,12 @@ public class Player_Move : MonoBehaviour
     bool qSkill;
     bool jumpAble;
     bool jumping;
-    bool canPlay;
+    bool isCooldown;
+    public bool canPlay;
     public bool canMove;
     public bool defending;
     public bool buttonUp;
+    public bool skilling;
 
     KeyCode jumpKey = KeyCode.Space;
     KeyCode runKey = KeyCode.LeftShift;
@@ -36,17 +41,26 @@ public class Player_Move : MonoBehaviour
     public Animation anim;
 
     Rigidbody2D rbody;
-    Animator animator;
+    public Animator animator;
 
     public LayerMask enemyLayer;
     public Vector2 attackOffset;
     public Vector2 attackSize;
 
-    HashSet<int> blockedStates;
+    public HashSet<int> blockedStates;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    private void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+        }
+
         rbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animation>();
         animator = GetComponent<Animator>();
@@ -75,6 +89,8 @@ public class Player_Move : MonoBehaviour
         eSkill = true;
         qSkill = true;
         defendSkill = true;
+        isCooldown = false;
+        skilling = false;
         HP = 100;
     }
 
@@ -82,7 +98,12 @@ public class Player_Move : MonoBehaviour
     void Update()
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        int currentHash = stateInfo.shortNameHash;
+        currentHash = stateInfo.shortNameHash;
+
+        if (buttonUp == true && defending == false)
+        {
+            canPlay = true;
+        }
 
         if (!blockedStates.Contains(currentHash))
         {
@@ -93,7 +114,7 @@ public class Player_Move : MonoBehaviour
                     Move();
                     Motion();
                 }
-                Skill();
+                //Skill();
             }
         }
 
@@ -145,8 +166,10 @@ public class Player_Move : MonoBehaviour
         if (jumping == true)
         {
             animator.Play("Player_Jump");
+            return;
         }
-        else if (h != 0)
+
+        if (h != 0)
         {
             if (curSpeed > speed)
             {
@@ -156,60 +179,20 @@ public class Player_Move : MonoBehaviour
             {
                 animator.Play("Player_Walk");
             }
-        }
-        else
-        {
-            animator.Play("Player_Idle");
-        }
-    }
-
-    void Skill()
-    {
-        Vector2 attackPos = (Vector2)transform.position + attackOffset;
-        Collider2D[] hits = Physics2D.OverlapBoxAll(attackPos, attackSize, 0f, enemyLayer);
-
-        /*foreach (var hit in hits)
-        {
-            Debug.Log("적 감지됨: " + hit.name);
-            hit.GetComponent<Enemy>()?.TakeDamage(1);
-        }*/
-        if (Input.GetMouseButtonDown(0))
-        {
-            animator.Play("Player_Attack1");
-            //StartCoroutine(Attack1(0.05f));
+            return;
         }
 
-        if (defendSkill)
+        if (defending)
         {
-            if (Input.GetMouseButtonDown(1))
-            {
-                buttonUp = false;
-                animator.Play("Player_Defend");
-                canPlay = false;
-                Debug.Log("Down");
-            }
-            else if (Input.GetMouseButtonUp(1))
-            {
-                buttonUp = true;
-                Debug.Log("Up");
-            }
-            else if (buttonUp == true && defending == false)
-            {
-                canPlay = true;
-            }
+            return;
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && eSkill)
+        if (skilling)
         {
-            animator.Play("Player_Attack2");
-            StartCoroutine(ESkillCool(3f));
+            return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && qSkill)
-        {
-            animator.Play("Player_Attack3");
-            StartCoroutine(QSkillCool(7f));
-        }
+        animator.Play("Player_Idle");
     }
 
     void OnDrawGizmosSelected()
@@ -235,6 +218,57 @@ public class Player_Move : MonoBehaviour
         Debug.Log("플레이 가능");
     }
 
+    public void NormalAttack()
+    {
+        skilling = true;
+        defending = false;
+        canPlay = true;
+        animator.Play("Player_Attack1");
+        buttonUp = true;
+    }
+
+    public void ESkill()
+    {
+        skilling = true;
+        defending = false;
+        canPlay = true;
+        animator.Play("Player_Attack2");
+        buttonUp = true;
+    }
+
+    public void QSkill()
+    {
+        skilling = true;
+        defending = false;
+        canPlay = true;
+        animator.Play("Player_Attack3");
+        buttonUp = true;
+    }
+
+    public void DefendSkill(int currentDefend)
+    {
+        if (currentDefend == 0)
+        {//스킬을 실행하지 않은 상태
+            //
+        }
+        else if (currentDefend == 1)
+        {// 우클릭을 누름
+            buttonUp = false;
+            animator.Play("Player_Defend");
+            canPlay = false;
+            Debug.Log("Down");
+        }
+        else if (currentDefend == 2)
+        {// 우클릭을 놓음
+            buttonUp = true;
+            Debug.Log("Up");
+        }
+        else
+        {
+            //
+        }
+    }
+
     IEnumerator ESkillCool(float cool)
     {
         Debug.Log("E스킬 쿨");
@@ -252,4 +286,11 @@ public class Player_Move : MonoBehaviour
         qSkill = true;
         Debug.Log("Q스킬 준비");
     }
+
+    public static void SkillTest()
+    {
+        Debug.Log("연동완료");
+    }
+
+    
 }
