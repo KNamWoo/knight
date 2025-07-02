@@ -8,7 +8,10 @@ using UnityEngine;
 
 public class Player_Move : MonoBehaviour
 {
-    public static Player_Move instance { get; private set; }
+    public GameObject[] players;
+    private List<GameObject> player = new List<GameObject>();
+    public List<GameObject> Player => player;
+    public static Player_Move instance; //{ get; private set; }
 
     public bool start = false;
 
@@ -77,6 +80,16 @@ public class Player_Move : MonoBehaviour
 
     void Start()
     {
+        SaveData saveData = LoadSystem.LoadGameData();
+        if (saveData != null)
+        {
+            Debug.Log("파일을 찾음");
+            foreach (Vector3 pos in saveData.playerData.positions)
+            {
+                this.transform.position = pos;
+            }
+        }
+
         StartCoroutine(EnableInputAfterDelay(0.3f));
         attackOffset = new Vector2(1.5f, -0.45f);
         attackSize = new Vector2(1.2f, 2f);
@@ -92,6 +105,10 @@ public class Player_Move : MonoBehaviour
         isCooldown = false;
         skilling = false;
         HP = 100;
+
+        players = GameObject.FindGameObjectsWithTag("Player");
+        player.AddRange(players);
+        //player.Add(this.gameObject);
     }
 
     // Update is called once per frame
@@ -291,6 +308,4 @@ public class Player_Move : MonoBehaviour
     {
         Debug.Log("연동완료");
     }
-
-    
 }

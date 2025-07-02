@@ -4,8 +4,8 @@ public class PickUpItem : MonoBehaviour
 {
     public GameObject slotItem;
     private bool itemBeing;
-    
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
@@ -30,10 +30,8 @@ public class PickUpItem : MonoBehaviour
                 }
                 if (inven.slots[i].isEmpty)
                 {
-                    Instantiate(slotItem, inven.slots[i].slotObj.transform, false);
-                    inven.slots[i].isEmpty = false;
-                    inven.slots[i].itemName = this.tag;
-                    inven.slots[i].itemCount++;
+                    ItemManager itemMan = ItemManager.instance;
+                    itemMan.ItemAdd(this.tag, i, 1);
                     Destroy(this.gameObject);
                     break;
                 }

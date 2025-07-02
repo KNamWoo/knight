@@ -3,9 +3,9 @@ using UnityEngine;
 public class HPItem : MonoBehaviour
 {
     Inventory inven;
-    int num;
+    public int num;
 
-    void Awake()
+    void Start()
     {
         inven = GameObject.Find("Player").GetComponent<Inventory>();
         num = transform.parent.GetComponent<Slot>().num;

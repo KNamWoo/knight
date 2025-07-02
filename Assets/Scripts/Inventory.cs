@@ -3,12 +3,32 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public GameObject[] invens;
+    private List<GameObject> inventory = new List<GameObject>();
+    public List<GameObject> Inven => inventory;
+    public static Inventory instance;
+
     public List<SlotData> slots = new List<SlotData>();
-    private int maxSlot = 3;
+    public int maxSlot = 3;
     public GameObject slotPrefab;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
 
     private void Start()
     {
+        invens = GameObject.FindGameObjectsWithTag("Player");
+        inventory.AddRange(invens);
+
         GameObject slotPanel = GameObject.Find("Panel");
 
         for (int i = 0; i < maxSlot; i++)
@@ -22,5 +42,7 @@ public class Inventory : MonoBehaviour
             slot.slotObj = go;
             slots.Add(slot);
         }
+
+        InvenDataLoad.instance.LoadInven();
     }
 }

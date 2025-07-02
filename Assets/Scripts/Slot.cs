@@ -27,5 +27,9 @@ public class Slot : MonoBehaviour
         {
             inventory.slots[num].isEmpty = true;
         }
+        else
+        {
+            inventory.slots[num].isEmpty = false;
+        }
     }
 }
