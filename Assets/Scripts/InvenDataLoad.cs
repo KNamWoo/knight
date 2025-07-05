@@ -27,26 +27,4 @@ public class InvenDataLoad : MonoBehaviour
     {
         //
     }
-
-    public void LoadInven()
-    {
-        inventory = Inventory.instance;
-        itemMan = ItemManager.instance;
-
-        SaveData saveData = LoadSystem.LoadGameData();
-        if (saveData != null)
-        {
-            Debug.Log("파일을 찾음");
-            int i;
-
-            for (i = 0; i<inventory.maxSlot; i++)
-            {
-                if (saveData.invenData.ItemNames[i] == "")
-                {
-                    continue;
-                }
-                itemMan.ItemAdd(saveData.invenData.ItemNames[i], i, saveData.invenData.ItemCounts[i]);
-            }
-        }
-    }
 }

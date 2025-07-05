@@ -35,6 +35,7 @@ public class Player_Move : MonoBehaviour
     public bool defending;
     public bool buttonUp;
     public bool skilling;
+    public bool gamePaused;
 
     KeyCode jumpKey = KeyCode.Space;
     KeyCode runKey = KeyCode.LeftShift;
@@ -52,6 +53,8 @@ public class Player_Move : MonoBehaviour
 
     public HashSet<int> blockedStates;
 
+    GameManager gameManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -67,6 +70,7 @@ public class Player_Move : MonoBehaviour
         rbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animation>();
         animator = GetComponent<Animator>();
+        gameManager = GameManager.instance;
 
         blockedStates = new HashSet<int>
         {
@@ -80,7 +84,7 @@ public class Player_Move : MonoBehaviour
 
     void Start()
     {
-        SaveData saveData = LoadSystem.LoadGameData();
+        /*SaveData saveData = LoadSystem.LoadGameData();
         if (saveData != null)
         {
             Debug.Log("파일을 찾음");
@@ -88,7 +92,7 @@ public class Player_Move : MonoBehaviour
             {
                 this.transform.position = pos;
             }
-        }
+        }*/
 
         StartCoroutine(EnableInputAfterDelay(0.3f));
         attackOffset = new Vector2(1.5f, -0.45f);
@@ -109,36 +113,38 @@ public class Player_Move : MonoBehaviour
         players = GameObject.FindGameObjectsWithTag("Player");
         player.AddRange(players);
         //player.Add(this.gameObject);
+        
+        Debug.Log("플레이어 위치설정");
+        gameManager.PlayerPosSet();
+        this.transform.position = gameManager.playerPosition;
+        this.transform.localScale = gameManager.playerScale;
     }
 
     // Update is called once per frame
     void Update()
     {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        currentHash = stateInfo.shortNameHash;
-
-        if (buttonUp == true && defending == false)
-        {
-            canPlay = true;
-        }
-
-        if (!blockedStates.Contains(currentHash))
-        {
-            if (start)
-            {
-                if (canPlay)
-                {
-                    Move();
-                    Motion();
-                }
-                //Skill();
+        if (!gameManager.currentPause) {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            currentHash = stateInfo.shortNameHash;
+            
+            if (buttonUp == true && defending == false) {
+                canPlay = true;
             }
-        }
-
-        if (HP <= 0)
-        {
-            Debug.Log("Player_Dead");
-            animator.Play("Player_Dead");
+            
+            if (!blockedStates.Contains(currentHash)) {
+                if (start) {
+                    if (canPlay) {
+                        Move();
+                        Motion();
+                    }
+                    //Skill();
+                }
+            }
+            
+            if (HP <= 0) {
+                Debug.Log("Player_Dead");
+                animator.Play("Player_Dead");
+            }
         }
     }
 

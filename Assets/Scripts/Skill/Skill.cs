@@ -8,62 +8,56 @@ public class Skill : MonoBehaviour
     public CoolSystem[] cool;
 
     Player_Move player;
+    GameManager gameManager;
 
     public void Start()
     {
         player = Player_Move.instance;
+        gameManager = GameManager.instance;
     }
 
     public void Update()
     {
-        if (!player.start)
-        {
-            return;
-        }
-        
-        if (player.blockedStates.Contains(player.currentHash))
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {// 좌클릭(일반공격)
-            player.NormalAttack();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {// 우클릭(방어)
-            player.DefendSkill(1);
-        }
-        else if (Input.GetKeyUp(KeyCode.Mouse1))
-        {
-            player.DefendSkill(2);
-        }
-        else
-        {
-            player.DefendSkill(0);
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {// E스킬(QuickKnife)
-            if (cool[1].isCooldown)
-            {
+        if (!gameManager.currentPause) {
+            if (!player.start) {
                 return;
             }
-
-            cool[1].StartCool(skills[1].maxCooldownTime);
-            player.ESkill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {// Q스킬(CircleKnife)
-            if (cool[2].isCooldown)
-            {
+            
+            if (player.blockedStates.Contains(player.currentHash)) {
                 return;
             }
-
-            cool[2].StartCool(skills[2].maxCooldownTime);
-            player.QSkill();
+            
+            if (Input.GetKeyDown(KeyCode.Mouse0)) {// 좌클릭(일반공격)
+                player.NormalAttack();
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Mouse1)) {// 우클릭(방어)
+                player.DefendSkill(1);
+            }
+            else if (Input.GetKeyUp(KeyCode.Mouse1)) {
+                player.DefendSkill(2);
+            }
+            else {
+                player.DefendSkill(0);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.E)) {// E스킬(QuickKnife)
+                if (cool[1].isCooldown) {
+                    return;
+                }
+                
+                cool[1].StartCool(skills[1].maxCooldownTime);
+                player.ESkill();
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Q)) {// Q스킬(CircleKnife)
+                if (cool[2].isCooldown) {
+                    return;
+                }
+                
+                cool[2].StartCool(skills[2].maxCooldownTime);
+                player.QSkill();
+            }
         }
     }
 }

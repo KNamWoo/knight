@@ -12,6 +12,8 @@ public class Inventory : MonoBehaviour
     public int maxSlot = 3;
     public GameObject slotPrefab;
 
+    GameManager gameManager;
+
     private void Awake()
     {
         if (instance != null)
@@ -22,6 +24,8 @@ public class Inventory : MonoBehaviour
         {
             instance = this;
         }
+
+        gameManager = GameManager.instance;
     }
 
     private void Start()
@@ -29,7 +33,7 @@ public class Inventory : MonoBehaviour
         invens = GameObject.FindGameObjectsWithTag("Player");
         inventory.AddRange(invens);
 
-        GameObject slotPanel = GameObject.Find("Panel");
+        GameObject slotPanel = GameObject.Find("QuickSlotPanel");
 
         for (int i = 0; i < maxSlot; i++)
         {
@@ -43,6 +47,6 @@ public class Inventory : MonoBehaviour
             slots.Add(slot);
         }
 
-        InvenDataLoad.instance.LoadInven();
+        gameManager.LoadInvenSave();
     }
 }

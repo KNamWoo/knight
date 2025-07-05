@@ -2,34 +2,116 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using UnityEditor.Overlays;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
+    public GameObject PauseWindow;
+    public GameObject PlayerPrefab;
+    public bool currentPause;
+
+    public Vector3 playerPosition;
+    public Vector3 playerScale;
+
+    Player_Move player;
     //save와 여러 전반적인 시스템 담당
 
-    void GameStart() { }
-    void GameSave()
-    {
-        //플레이어의 아이템의 개수와 여러가지 사항들을 저장
+    private void Awake() {
+        if (instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+        }
+
+        player = Player_Move.instance;
     }
-    void GameLoad()
-    {
-        //
+    private void Start() {
+        PauseWindow.SetActive(false);
+        currentPause = false;
+
+        PlayerPrefab.SetActive(true);
+    }
+
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (currentPause) {
+                GameContinue();
+            }
+            else {
+                GamePause();
+            }
+        }
+    }
+    
+    public void GamePause() {
+        PauseWindow.SetActive(true);
+        currentPause = true;
+        Time.timeScale = 0f;
+    }
+    public void GameContinue() {
+        PauseWindow.SetActive(false);
+        currentPause = false;
+        Time.timeScale = 1f;
+        player.canPlay = false;    
+    }
+    public void GameSettings() {
+        //SettingWindow.SetActive(true);
+    }
+    public void LoadInvenSave() {
+        Inventory inventory = Inventory.instance;
+        ItemManager itemMan = ItemManager.instance;
+        SaveData saveData = LoadSystem.LoadGameData();
+
+        if (saveData != null)
+        {
+            Debug.Log("파일을 찾음");
+            
+            for (int i = 0; i<inventory.maxSlot; i++) {
+                if (saveData.invenData.ItemNames[i] == "")
+                {
+                    continue;
+                }
+                itemMan.ItemAdd(saveData.invenData.ItemNames[i], i, saveData.invenData.ItemCounts[i]);
+            }
+        }
+    }
+    
+    public void PlayerPosSet() {
+        SaveData saveData = LoadSystem.LoadGameData();
+        
+        if (saveData != null) {
+            Debug.Log("파일을 찾음");
+            playerPosition = saveData.playerData.positions[0];
+            playerScale = saveData.playerData.scales[0];
+        }
+    }
+
+    public void GameSave() {
+        SaveSystem.SaveGameData();
+    }
+    public void Quit() {
+        GameSave();
+        Application.Quit();
     }
     
     private void OnApplicationPause(bool pause)
     {
         if (pause)
         {
-            SaveSystem.SaveGameData();
+            GameSave();
         }
     }
 
     private void OnApplicationQuit()
     {
-        SaveSystem.SaveGameData();
+        GameSave();
     }
 }
 
