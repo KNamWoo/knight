@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using UnityEditor.Overlays;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject PauseWindow;
     public GameObject PlayerPrefab;
+    public GameObject quickSlot;
     public bool currentPause;
 
     public Vector3 playerPosition;
@@ -29,14 +31,17 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-
-        player = Player_Move.instance;
+        currentPause = false;
     }
     private void Start() {
         PauseWindow.SetActive(false);
-        currentPause = false;
 
-        PlayerPrefab.SetActive(true);
+        //Instantiate(PlayerPrefab, playerPosition, Quaternion.identity);
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Move>();
+        //Instantiate(quickSlot, playerPosition, default);
+        //currentPause = false;
+
+        //PlayerPrefab.SetActive(true);
     }
 
     private void Update() {
@@ -96,6 +101,7 @@ public class GameManager : MonoBehaviour
     public void GameSave() {
         SaveSystem.SaveGameData();
     }
+
     public void Quit() {
         GameSave();
         Application.Quit();
@@ -113,6 +119,13 @@ public class GameManager : MonoBehaviour
     {
         GameSave();
     }
+    
+    public void Load() {
+        SaveData saveData = LoadSystem.LoadGameData();
+
+        GameContinue();
+        SceneManager.LoadScene(saveData.sceneName.sceneName);    
+    }
 }
 
 
@@ -126,7 +139,8 @@ public static class SaveSystem
 
         PlayerData playerData = new PlayerData(Player_Move.instance);
         InvenData invenData = new InvenData(Inventory.instance);
-        SaveData saveData = new SaveData(playerData, invenData);
+        SceneData sceneName = new SceneData();
+        SaveData saveData = new SaveData(playerData, invenData, sceneName);
 
         string txt = JsonUtility.ToJson(saveData, true);// true로 설정하면 자동 줄 바꿈이 적용됨
         File.WriteAllText(filePathSaveData, txt);
@@ -141,11 +155,13 @@ public class SaveData
 {
     [SerializeField] public PlayerData playerData;
     [SerializeField] public InvenData invenData;
+    [SerializeField] public SceneData sceneName;
 
-    public SaveData(PlayerData playerData, InvenData invenData)
+    public SaveData(PlayerData playerData, InvenData invenData, SceneData sceneName)
     {
         this.playerData = playerData;
         this.invenData = invenData;
+        this.sceneName = sceneName;
     }
 }
 
@@ -174,6 +190,15 @@ public class InvenData
     {
         ItemNames = inven.slots.Select(Object => Object.itemName).ToList();
         ItemCounts = inven.slots.Select(Object => Object.itemCount).ToList();
+    }
+}
+
+[Serializable]
+public class SceneData {
+    [SerializeField] public string sceneName;
+    
+    public SceneData() {
+        sceneName = SceneManager.GetActiveScene().name;
     }
 }
 
