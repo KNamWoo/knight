@@ -8,6 +8,7 @@ TagManager:
   - Slot
   - HPPotion
   - MPPotion
+  - PickupItem
   layers:
   - Default
   - TransparentFX

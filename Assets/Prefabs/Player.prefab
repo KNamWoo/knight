@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 2993279388136362915}
   - component: {fileID: 8495480690062336264}
   - component: {fileID: 5527891389180412176}
-  - component: {fileID: 8411772986004185608}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -230,19 +229,3 @@ MonoBehaviour:
     m_Bits: 0
   attackOffset: {x: 1.5, y: -0.45}
   attackSize: {x: 1.2, y: 2}
---- !u!114 &8411772986004185608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8618960757864289370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c92c3edb9970b8a4ba1eea952966f89c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  invens: []
-  slots: []
-  maxSlot: 3
-  slotPrefab: {fileID: 8552795518105892574, guid: 718e573b81fb76a4f81505c1343ed285, type: 3}

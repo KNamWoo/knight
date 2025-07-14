@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 4637031957672079928}
   - component: {fileID: 334898887605019978}
   - component: {fileID: 2254898983363403534}
-  - component: {fileID: 8546807108668949994}
+  - component: {fileID: 444191545979268884}
+  - component: {fileID: 9053212746636775220}
   m_Layer: 5
   m_Name: HPPotion
-  m_TagString: Untagged
+  m_TagString: PickupItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +77,44 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8546807108668949994
+--- !u!70 &444191545979268884
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5463659091467332052}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 1.696167, y: -1.2621918}
+  m_Size: {x: 55.232178, y: 83.332855}
+  m_Direction: 0
+--- !u!114 &9053212746636775220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,3 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a904e8e83b7bb3d44a543fb561b67028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ItemName: HPPotion
+  itemCount: 0
+  ItemImage: {fileID: 21300000, guid: 95c125bd76a1b584d88485d206717539, type: 3}

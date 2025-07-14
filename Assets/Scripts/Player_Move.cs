@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mono.Cecil.Cil;
@@ -54,6 +55,7 @@ public class Player_Move : MonoBehaviour
     public HashSet<int> blockedStates;
 
     GameManager gameManager;
+    InventorySys inventory;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -71,6 +73,7 @@ public class Player_Move : MonoBehaviour
         anim = GetComponent<Animation>();
         animator = GetComponent<Animator>();
         gameManager = GameManager.instance;
+        inventory = InventorySys.instance;
 
         blockedStates = new HashSet<int>
         {
@@ -115,6 +118,11 @@ public class Player_Move : MonoBehaviour
         //player.Add(this.gameObject);
         
         Debug.Log("플레이어 위치설정");
+        
+        PlayerPosLoad();
+    }
+    
+    public void PlayerPosLoad() {
         gameManager.PlayerPosSet();
         this.transform.position = gameManager.playerPosition;
         this.transform.localScale = gameManager.playerScale;
@@ -313,5 +321,12 @@ public class Player_Move : MonoBehaviour
     public static void SkillTest()
     {
         Debug.Log("연동완료");
+    }
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.tag == "PickupItem") {
+            ItemBase item = other.GetComponent<ItemBase>();
+            inventory.AddItem(item.ItemName, item.itemCount);
+            Destroy(other.gameObject);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
         //currentPause = false;
 
         //PlayerPrefab.SetActive(true);
+        Load(); 
     }
 
     private void Update() {
@@ -69,24 +71,6 @@ public class GameManager : MonoBehaviour
     public void GameSettings() {
         //SettingWindow.SetActive(true);
     }
-    public void LoadInvenSave() {
-        Inventory inventory = Inventory.instance;
-        ItemManager itemMan = ItemManager.instance;
-        SaveData saveData = LoadSystem.LoadGameData();
-
-        if (saveData != null)
-        {
-            Debug.Log("파일을 찾음");
-            
-            for (int i = 0; i<inventory.maxSlot; i++) {
-                if (saveData.invenData.ItemNames[i] == "")
-                {
-                    continue;
-                }
-                itemMan.ItemAdd(saveData.invenData.ItemNames[i], i, saveData.invenData.ItemCounts[i]);
-            }
-        }
-    }
     
     public void PlayerPosSet() {
         SaveData saveData = LoadSystem.LoadGameData();
@@ -111,7 +95,7 @@ public class GameManager : MonoBehaviour
     {
         if (pause)
         {
-            GameSave();
+            GamePause();
         }
     }
 
@@ -120,11 +104,38 @@ public class GameManager : MonoBehaviour
         GameSave();
     }
     
-    public void Load() {
+    public void LoadBtn() {
         SaveData saveData = LoadSystem.LoadGameData();
 
+        if (SceneManager.GetActiveScene().name != saveData.sceneName.sceneName) {
+            //SaveFile에 저장된 씬 네임이 다를경우 그쪽 씬을 로드해줘야 함.
+            SceneManager.LoadScene(saveData.sceneName.sceneName);
+        }
+
+        Load();
+    }
+    
+    public void Load() {
+        SaveData saveData = LoadSystem.LoadGameData();
+        
+        if (saveData == null) {
+            Debug.LogWarning("저장된 데이터 없음");
+            return;
+        }
+
         GameContinue();
-        SceneManager.LoadScene(saveData.sceneName.sceneName);    
+        player.PlayerPosLoad();
+        
+        InventorySys inven = InventorySys.instance;
+        inven.ResetQuickSlots();
+        StartCoroutine(LoadAfterSceneLoad(saveData));
+    }
+    
+    private IEnumerator LoadAfterSceneLoad(SaveData saveData) {
+        yield return new WaitForSeconds(0.1f);
+
+        InventorySys inven = InventorySys.instance;
+        inven.LoadQuickSlotData(saveData.quickSlotData);
     }
 }
 
@@ -138,9 +149,10 @@ public static class SaveSystem
         string filePathSaveData = Application.persistentDataPath + FileName_SaveData;
 
         PlayerData playerData = new PlayerData(Player_Move.instance);
-        InvenData invenData = new InvenData(Inventory.instance);
         SceneData sceneName = new SceneData();
-        SaveData saveData = new SaveData(playerData, invenData, sceneName);
+        QuickSlotData quickSlotData = new QuickSlotData(InventorySys.instance.slots);
+
+        SaveData saveData = new SaveData(playerData, sceneName, quickSlotData);
 
         string txt = JsonUtility.ToJson(saveData, true);// true로 설정하면 자동 줄 바꿈이 적용됨
         File.WriteAllText(filePathSaveData, txt);
@@ -154,14 +166,14 @@ public static class SaveSystem
 public class SaveData
 {
     [SerializeField] public PlayerData playerData;
-    [SerializeField] public InvenData invenData;
     [SerializeField] public SceneData sceneName;
+    [SerializeField] public QuickSlotData quickSlotData;
 
-    public SaveData(PlayerData playerData, InvenData invenData, SceneData sceneName)
+    public SaveData(PlayerData playerData, SceneData sceneName, QuickSlotData quickSlotData)
     {
         this.playerData = playerData;
-        this.invenData = invenData;
         this.sceneName = sceneName;
+        this.quickSlotData = quickSlotData;
     }
 }
 
@@ -180,18 +192,6 @@ public class PlayerData
     }
 }
 
-[Serializable]
-public class InvenData
-{
-    [SerializeField] public List<String> ItemNames;
-    [SerializeField] public List<int> ItemCounts;
-
-    public InvenData(Inventory inven)
-    {
-        ItemNames = inven.slots.Select(Object => Object.itemName).ToList();
-        ItemCounts = inven.slots.Select(Object => Object.itemCount).ToList();
-    }
-}
 
 [Serializable]
 public class SceneData {
@@ -199,6 +199,28 @@ public class SceneData {
     
     public SceneData() {
         sceneName = SceneManager.GetActiveScene().name;
+    }
+}
+
+[Serializable]
+public class QuickSlotData {
+    public List<string> itemNames;
+    public List<int> itemCounts;
+    
+    public QuickSlotData(QuickSlot[] slots) {
+        itemNames = new List<string>();
+        itemCounts = new List<int>();
+        
+        foreach (var slot in slots) {
+            if (slot.currentItem != null) {
+                itemNames.Add(slot.currentItem.ItemName);
+                itemCounts.Add(slot.currentItem.itemCount);
+            }
+            else {
+                itemNames.Add("");
+                itemCounts.Add(0);
+            }
+        }
     }
 }
 
