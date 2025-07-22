@@ -39,7 +39,8 @@ public class InventorySys : MonoBehaviour
         }
     }
     
-    public void AddItem(string itemName, int count) {
+    public void AddItem(string itemName) {
+        Debug.Log("AddItem 실행");
         GameObject prefab = null;
         
         switch (itemName) {
@@ -53,20 +54,21 @@ public class InventorySys : MonoBehaviour
                 Debug.LogError("알 수 없는 아이템");
                 return;
         }
-
         
+        Debug.Log("인벤토리 채우기");
         
         for (int i = 0; i < slots.Length; i++) {
             if (!slots[i].IsEmpty) {
                 if (slots[i].currentItem.ItemName == itemName) {
+                    Debug.Log("기존 공간에 채우기");
                     slots[i].currentItem.itemCount++;
                     return;
                 }
             }
         }
-        
+
+        Debug.Log("빈 공간에 채우기");
         for (int i = 0; i < slots.Length; i++) {
-            
             if (slots[i].IsEmpty) {
                 GameObject go = Instantiate(prefab);
                 ItemBase item = go.GetComponent<ItemBase>();

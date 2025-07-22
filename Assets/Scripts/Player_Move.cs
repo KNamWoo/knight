@@ -55,7 +55,6 @@ public class Player_Move : MonoBehaviour
     public HashSet<int> blockedStates;
 
     GameManager gameManager;
-    InventorySys inventory;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -73,7 +72,6 @@ public class Player_Move : MonoBehaviour
         anim = GetComponent<Animation>();
         animator = GetComponent<Animator>();
         gameManager = GameManager.instance;
-        inventory = InventorySys.instance;
 
         blockedStates = new HashSet<int>
         {
@@ -325,7 +323,8 @@ public class Player_Move : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "PickupItem") {
             ItemBase item = other.GetComponent<ItemBase>();
-            inventory.AddItem(item.ItemName, item.itemCount);
+            InventorySys inv = InventorySys.instance;
+            inv.AddItem(item.ItemName);
             Destroy(other.gameObject);
         }
     }
