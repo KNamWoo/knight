@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
         else
         {
             instance = this;
+
+            DontDestroyOnLoad(gameObject);
         }
         currentPause = false;
     }
@@ -38,12 +40,11 @@ public class GameManager : MonoBehaviour
         PauseWindow.SetActive(false);
 
         //Instantiate(PlayerPrefab, playerPosition, Quaternion.identity);
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Move>();
         //Instantiate(quickSlot, playerPosition, default);
         //currentPause = false;
 
         //PlayerPrefab.SetActive(true);
-        Load(); 
+        //Load(); 
     }
 
     private void Update() {
@@ -66,7 +67,7 @@ public class GameManager : MonoBehaviour
         PauseWindow.SetActive(false);
         currentPause = false;
         Time.timeScale = 1f;
-        player.canPlay = false;    
+//        player.canPlay = false;    
     }
     public void GameSettings() {
         //SettingWindow.SetActive(true);
@@ -109,10 +110,19 @@ public class GameManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name != saveData.sceneName.sceneName) {
             //SaveFile에 저장된 씬 네임이 다를경우 그쪽 씬을 로드해줘야 함.
-            SceneManager.LoadScene(saveData.sceneName.sceneName);
+            StartCoroutine(LoadWithCallback(SceneNames.Player));
         }
+        else {
+            Load();
+        }
+    }
+    
+    private IEnumerator LoadWithCallback(SceneNames scene) {
+        UnityNote.SceneLoader.instance.LoadScene(scene);
 
-        Load();
+        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == scene.ToString());
+
+        yield return null;
     }
     
     public void Load() {
@@ -124,6 +134,7 @@ public class GameManager : MonoBehaviour
         }
 
         GameContinue();
+        player = Player_Move.instance;
         player.PlayerPosLoad();
         
         InventorySys inven = InventorySys.instance;
@@ -131,7 +142,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LoadAfterSceneLoad(saveData));
     }
     
-    private IEnumerator LoadAfterSceneLoad(SaveData saveData) {
+    public IEnumerator LoadAfterSceneLoad(SaveData saveData) {
         yield return new WaitForSeconds(0.1f);
 
         InventorySys inven = InventorySys.instance;

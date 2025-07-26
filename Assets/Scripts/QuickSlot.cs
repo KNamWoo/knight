@@ -19,6 +19,10 @@ public class QuickSlot : MonoBehaviour
     public void UseItem() {
         if (currentItem != null) {
             currentItem.Use();
+            
+            if (currentItem.itemCount <= 0) {
+                IsEmpty = true;
+            }
         }
     }
     
